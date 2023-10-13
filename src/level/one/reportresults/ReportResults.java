@@ -1,6 +1,7 @@
 package level.one.reportresults;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ReportResults {
     public static void main(String[] args) {
@@ -14,35 +15,25 @@ public class ReportResults {
     public int[] solution(String[] id_list, String[] report, int k) {
 
         // 중복제거
-        report =  Arrays.stream(report).distinct().toArray(String[]::new);
+        List<String> newList = Arrays.stream(report).distinct().collect(Collectors.toList());
 
         Map<String, Integer> reports = new HashMap<>();
-
         int[] answer = new int[id_list.length];
 
         // 신고횟수 저장하기
-        for (String str : report) {
+        for (String str : newList) {
             String[] split = str.split(" ");
-
-            int val = reports.get(split[1]) == null ? 0 : reports.get(split[1]);
-            if(val > 0) {
-                reports.replace(split[1], val + 1);
+            if(reports.containsKey(split[1])) {
+                reports.put(split[1], reports.get(split[1]) + 1);
             } else {
                 reports.put(split[1], 1);
             }
         }
 
-        for (int i = 0; i < id_list.length; i++) {
-            for (String str : report) {
-                String[] split = str.split(" ");
-                if(id_list[i].equals(split[0])) {
-                    int cnt = reports.get(split[1]);
-                    if(cnt >= k) {
-                        answer[i] += 1;
-                    }
-                }
-            }
-        }
-        return answer;
+        return Arrays.stream(id_list).map(ids -> {
+            final String id = ids;
+            List<String> result = newList.stream().filter(s -> s.split(" ")[0].equals(id)).collect(Collectors.toList());
+            return result.stream().filter(s -> reports.get(s.split(" ")[1]) >= k).count();
+        }).mapToInt(Long::intValue).toArray();
     }
 }
