@@ -35,8 +35,6 @@ public class MemoryScore {
             }
             answer[idx++] = sum;
             sum = 0;
-
-
         }
 
         return answer;
