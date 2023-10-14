@@ -15,7 +15,7 @@ public class ReportResults {
     public int[] solution(String[] id_list, String[] report, int k) {
 
         // 중복제거
-        List<String> newList = Arrays.stream(report).distinct().collect(Collectors.toList());
+        List<String> newList = Arrays.stream(report).distinct().toList();
 
         Map<String, Integer> reports = new HashMap<>();
         int[] answer = new int[id_list.length];
@@ -31,9 +31,9 @@ public class ReportResults {
         }
 
         return Arrays.stream(id_list).map(ids -> {
-            final String id = ids;
-            List<String> result = newList.stream().filter(s -> s.split(" ")[0].equals(id)).collect(Collectors.toList());
-            return result.stream().filter(s -> reports.get(s.split(" ")[1]) >= k).count();
-        }).mapToInt(Long::intValue).toArray();
+                final String id = ids;
+                List<String> result = newList.stream().filter(s -> s.split(" ")[0].equals(id)).collect(Collectors.toList());
+                return result.stream().filter(s -> reports.get(s.split(" ")[1]) >= k).count();
+            }).mapToInt(Long::intValue).toArray();
     }
 }
