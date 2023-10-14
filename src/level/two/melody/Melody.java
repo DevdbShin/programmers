@@ -1,4 +1,4 @@
-package level.one.melody;
+package level.two.melody;
 
 public class Melody {
     public static void main(String[] args) {
