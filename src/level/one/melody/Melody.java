@@ -1,11 +1,5 @@
 package level.one.melody;
 
-import level.one.menu.MenuFixed;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 public class Melody {
     public static void main(String[] args) {
         Melody m = new Melody();
