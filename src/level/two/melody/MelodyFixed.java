@@ -10,10 +10,10 @@ public class MelodyFixed {
         String melody = "ABC#";
 
         MelodyFixed mf = new MelodyFixed();
-        //System.out.println(mf.solution("ABCDEFG", new String[] {"12:00,12:14,HELLO,CDEFGAB", "13:00,13:05,WORLD,ABCDEF"}));
+        System.out.println(mf.solution("ABC", new String[] {"12:00,12:14,HELLO,C#DEFGAB", "13:00,13:05,WORLD,ABCDEF"}));
         System.out.println(mf.solution("ABC", new String[] {"13:00,13:06,FOO,ABC#ABC"}));
         System.out.println(mf.solution("ABABC", new String[] {"12:00,12:07,HELLO,ABABABC"}));
-        System.out.println(mf.solution("A#", new String[] {"13:00,13:01,BAR,A#"}));
+        System.out.println(mf.solution("A#", new String[] {"13:00,13:02,BAR,AA#"}));
         //System.out.println(mf.solution("A#A#A#", new String[] {"07:10,07:17,FOO,AA#A#A#"}));
     }
 
@@ -88,51 +88,36 @@ class MusicInfo {
         int duringTime = this.getDuringTime();
         int mp=0;
 
-        /*for(int i=0,p=0;i<duringTime;++i,p=(p+1)%this.melody.length()) {
-             if(this.melody.charAt(p) == melody.charAt(mp)) {
-                 ++mp;
-                 if(this.melody.charAt(p)=='#') {
-                     --i;
-                 }
-                 if(mp==melody.length()) {
-                     return (this.melody.charAt((p+1)%this.melody.length())!='#');
-                 }
-             } else {
-                 mp=0;
-             }
-        }*/
-
-        if(melody.length() >= duringTime && melody.charAt(melody.length() - 1) == '#') {
-            duringTime = duringTime + 1;
-        }
-
-        for(int i = 0, p = 0, r = 1; i < duringTime && r <= duringTime; ++i, p = (p + 1) % this.melody.length()) {
+        for(int i = 0, p = 0; i < duringTime; ++i, p = (p + 1) % this.melody.length()) {
+            if(this.melody.length() > p + 1) {
+                if(this.melody.charAt(p + 1) == '#') {
+                    ++duringTime;
+                }
+            }
             if(this.melody.charAt(p) == melody.charAt(mp)) {
                 ++mp;
-                if(this.melody.charAt(p) == '#') {
-                    --i;
-                }
                 if(mp == melody.length()) {
-                    if(this.melody.charAt((p + 1) % this.melody.length())!='#') {
+                    if(this.melody.charAt((p+1)%this.melody.length())!='#') {
                         return true;
                     } else {
+                        --i;
                         mp = 0;
-                        i = 0;
-                        p = r;
-                        ++r;
                     }
                 }
             } else {
                 if(0 < mp) {
                     i = 0;
-                    p = r;
-                    ++r;
                 }
+                p -= mp;
                 mp = 0;
             }
         }
 
-        /*for(int i = 0,p = 0,r = 1; i < duringTime && r <= duringTime; ++i, p = (p + 1) % this.melody.length()) {
+        /*if(melody.length() > duringTime && melody.charAt(melody.length() - 1) == '#') {
+            duringTime = duringTime + 1;
+        }
+
+        for(int i = 0,p = 0,r = 1; i < duringTime && r <= duringTime; ++i, p = (p + 1) % this.melody.length()) {
             if(this.melody.charAt(p) == melody.charAt(mp)) {
                 ++mp;
                 if(this.melody.charAt(p)=='#') {
