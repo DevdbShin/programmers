@@ -88,7 +88,7 @@ class MusicInfo {
         int duringTime = this.getDuringTime();
         int mp=0;
 
-        ArrayList<Character> arr = new ArrayList<>();
+        /*ArrayList<Character> arr = new ArrayList<>();
 
         for (int i = 0, p = 0; i < duringTime; i++, p = (p + 1) % this.melody.length()) {
             arr.add(this.melody.charAt(p));
@@ -111,9 +111,9 @@ class MusicInfo {
                 i -= mp;
                 mp = 0;
             }
-        }
+        }*/
 
-        /*if(melody.length() >= duringTime && melody.charAt(melody.length() - 1) == '#') {
+        if(melody.length() >= duringTime && melody.charAt(melody.length() - 1) == '#') {
             duringTime = duringTime + 1;
         }
 
@@ -140,7 +140,7 @@ class MusicInfo {
                 }
                 mp = 0;
             }
-        }*/
+        }
         return false;
     }
 }
