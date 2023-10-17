@@ -11,10 +11,10 @@ public class MelodyFixed {
 
         MelodyFixed mf = new MelodyFixed();
         //System.out.println(mf.solution("ABCDEFG", new String[] {"12:00,12:14,HELLO,CDEFGAB", "13:00,13:05,WORLD,ABCDEF"}));
+        System.out.println(mf.solution("A#B#C#", new String[] {"12:00,12:07,HELLO,C#A#B#"}));
         System.out.println(mf.solution("ABC", new String[] {"13:00,13:06,FOO,ABC#ABC"}));
-        System.out.println(mf.solution("ABABC", new String[] {"12:00,12:07,HELLO,ABABABC"}));
-        System.out.println(mf.solution("A#", new String[] {"13:00,13:01,BAR,A#"}));
-        //System.out.println(mf.solution("A#A#A#", new String[] {"07:10,07:17,FOO,AA#A#A#"}));
+        System.out.println(mf.solution("A", new String[] {"13:00,13:01,BAR,A#"}));
+        System.out.println(mf.solution("A#A#A#", new String[] {"07:10,07:17,FOO,AA#A#A#"}));
     }
 
     public String solution (String m, String[] musicinfos) {
