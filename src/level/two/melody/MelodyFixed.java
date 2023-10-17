@@ -6,15 +6,15 @@ import java.util.List;
 public class MelodyFixed {
 
     public static void main(String[] args) throws Exception {
-        String[] inputArray = {"12:00,12:14,HELLO,C#DEFGAB", "13:00,13:05,WORLD,ABCDEF"};
-        String melody = "ABC#";
 
         MelodyFixed mf = new MelodyFixed();
-        //System.out.println(mf.solution("ABCDEFG", new String[] {"12:00,12:14,HELLO,CDEFGAB", "13:00,13:05,WORLD,ABCDEF"}));
-        System.out.println(mf.solution("A#B#C#", new String[] {"12:00,12:07,HELLO,C#A#B#"}));
+        System.out.println(mf.solution("ABC", new String[] {"12:00,12:14,HELLO,C#DEFGAB", "13:00,13:05,WORLD,ABCDEF"}));
+        System.out.println(mf.solution("A#", new String[] {"13:00,13:02,BAR,AA#"}));
         System.out.println(mf.solution("ABC", new String[] {"13:00,13:06,FOO,ABC#ABC"}));
-        System.out.println(mf.solution("A", new String[] {"13:00,13:01,BAR,A#"}));
-        System.out.println(mf.solution("A#A#A#", new String[] {"07:10,07:17,FOO,AA#A#A#"}));
+        System.out.println(mf.solution("ABC", new String[] {"12:00,12:14,HELLO,C#DEFGAB", "13:00,13:05,WORLD,ABCDEF"}));
+        System.out.println(mf.solution("ABABC", new String[] {"12:00,12:07,HELLO,ABABABC"}));
+        System.out.println(mf.solution("A#", new String[] {"13:00,13:01,BAR,A#"}));
+        System.out.println(mf.solution("CC#B#CC#B#CC#B#CC#B#", new String[] {"03:00,03:30,FOO,CC#B#"}));
     }
 
     public String solution (String m, String[] musicinfos) {
@@ -88,51 +88,36 @@ class MusicInfo {
         int duringTime = this.getDuringTime();
         int mp=0;
 
-        /*for(int i=0,p=0;i<duringTime;++i,p=(p+1)%this.melody.length()) {
-             if(this.melody.charAt(p) == melody.charAt(mp)) {
-                 ++mp;
-                 if(this.melody.charAt(p)=='#') {
-                     --i;
-                 }
-                 if(mp==melody.length()) {
-                     return (this.melody.charAt((p+1)%this.melody.length())!='#');
-                 }
-             } else {
-                 mp=0;
-             }
-        }*/
+        ArrayList<Character> arr = new ArrayList<>();
 
-        if(melody.length() >= duringTime && melody.charAt(melody.length() - 1) == '#') {
-            duringTime = duringTime + 1;
+        for (int i = 0, p = 0; i < duringTime; i++, p = (p + 1) % this.melody.length()) {
+            arr.add(this.melody.charAt(p));
+            if(this.melody.charAt((p + 1) % this.melody.length()) == '#') {
+               --i;
+            }
         }
 
-        for(int i = 0, p = 0, r = 1; i < duringTime && r <= duringTime; ++i, p = (p + 1) % this.melody.length()) {
-            if(this.melody.charAt(p) == melody.charAt(mp)) {
+       for (int i = 0; i < arr.size(); i++) {
+           if(melody.charAt(mp) == arr.get(i)) {
                 ++mp;
-                if(this.melody.charAt(p) == '#') {
-                    --i;
-                }
                 if(mp == melody.length()) {
-                    if(this.melody.charAt((p + 1) % this.melody.length())!='#') {
+                    if(arr.get((i + 1) % arr.size()) != '#') {
                         return true;
                     } else {
                         mp = 0;
-                        i = 0;
-                        p = r;
-                        ++r;
                     }
                 }
             } else {
-                if(0 < mp) {
-                    i = 0;
-                    p = r;
-                    ++r;
-                }
+                i -= mp;
                 mp = 0;
             }
         }
 
-        /*for(int i = 0,p = 0,r = 1; i < duringTime && r <= duringTime; ++i, p = (p + 1) % this.melody.length()) {
+        /*if(melody.length() >= duringTime && melody.charAt(melody.length() - 1) == '#') {
+            duringTime = duringTime + 1;
+        }
+
+        for(int i = 0,p = 0,r = 0; i < duringTime && r < duringTime; ++i, p = (p + 1) % this.melody.length()) {
             if(this.melody.charAt(p) == melody.charAt(mp)) {
                 ++mp;
                 if(this.melody.charAt(p)=='#') {
@@ -142,10 +127,9 @@ class MusicInfo {
                     if(this.melody.charAt((p + 1) % this.melody.length())!='#') {
                         return true;
                     } else {
-                        mp = 0;
-                        i = 0;
-                        p = r;
+                        p = (p + 1) % this.melody.length();
                         ++r;
+                        mp = 0;
                     }
                 }
             } else {
@@ -154,7 +138,7 @@ class MusicInfo {
                     p = r;
                     ++r;
                 }
-                mp=0;
+                mp = 0;
             }
         }*/
         return false;
