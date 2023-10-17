@@ -1,10 +1,16 @@
 package level.two.bracket;
 
+import java.util.Arrays;
+
 public class Bracket {
     public static void main(String[] args) {
 
         Bracket bc = new Bracket();
-        System.out.println( bc.solution(")()("));
+        System.out.println( bc.solution("))(())(("));
+        System.out.println( bc.solution(")("));
+        System.out.println( bc.solution(")(((())))("));
+        System.out.println(bc.solution("()))((()"));
+
     }
     public String solution(String p) {
         BracketInfo bracket = new BracketInfo(p);
@@ -38,15 +44,22 @@ class BracketInfo {
                 } else {
                     ++right;
                 }
-                if(left == right && i != 0) {
-                    this.u = tmp;
-                    if(this.u.charAt(0) == ')') {
-                        this.u = this.balance();
-                    }
-                    this.r += this.u;
-                    if(i + 1 < param.length()) {
-                        this.v = param.substring(i + 1);
-                        sortBracket(this.v);
+
+                if(i != 0) {
+                    if(left == right && left == 1) {
+                        // 일반 케이스
+                        this.u = tmp;
+                        if(this.u.charAt(0) == ')') {
+                            this.u = this.balance(this.u);
+                        }
+                        this.r += this.u;
+                        if(i + 1 < param.length()) {
+                            this.v = param.substring(i + 1);
+                            sortBracket(this.v);
+                        }
+                    } else {
+                        // 방향만 바꿔주면 되는 케이스
+                        this.r = this.replaceArrow();
                     }
                     break;
                 }
@@ -55,25 +68,51 @@ class BracketInfo {
     }
 
     // 온전한 괄호 만들기
-    private String balance () {
+    private String balance (String param) {
 
-        String[] str = this.u.split("");
+        String[] str = param.split("");
         String result = "";
 
-        if(str.length > 2) {
-            str[0] = str[str.length - 1];
-            // 순서 뒤집기
-            result = str[0];
-            for (int i = 1; i < str.length; i++) {
+        // 순서 뒤집기
+        result = str[str.length - 1];
+
+        boolean bool = false;
+        for (int i = 1; i < str.length - 1; i++) {
+            if(i == 1 && str[i].charAt(0) == '(') {
+                bool = true;
+            }
+
+            if(bool) {
+                result += str[i];
+            } else {
                 if (str[i].charAt(0) == '(') {
                     result += ")";
                 } else {
                     result += "(";
                 }
             }
-        } else {
-            result = str[1] + str[0];
         }
+        result += str[0];
         return result;
+    }
+
+    private String replaceArrow() {
+
+        char[] arr = this.w.toCharArray();
+
+        char right = this.w.charAt(arr.length / 2);
+        char left = this.w.charAt( (arr.length / 2) - 1);
+
+        for (int i = arr.length / 2, j = i - 1; i < arr.length && j >= 0 ; ++i, --j) {
+
+            if(arr[i] != right) {
+                arr[i] = right;
+            }
+
+            if(arr[j] != left) {
+                arr[j] = left;
+            }
+        }
+       return String.valueOf(arr);
     }
 }
