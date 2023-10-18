@@ -32,7 +32,7 @@ public class DfsBfs {
 
         if(root.getChild(cur) != null) {
             curNode = root.getChild(cur);
-            curNode.setChild(cur, );
+            curNode.setChild(cur, null);
         } else {
             curNode = new GraphNode();
             curNode.setParent(root);
