@@ -24,73 +24,48 @@ public class Electricity {
 
         wire = wires;
 
-        Top top = new Top(null, 0, 1, 0);
+        Top top = new Top(null, 0, 0);
 
         for (int i = 0; i < wires.length; i++) {
             countWires(top, wire[i], 0);
         }
 
-        /*for (Top item : top.child.values()) {
+        for (Top item : top.child) {
             System.out.println(item.toString());
-        }*/
-
-        List<MaxTop> list = new ArrayList<>();
-        dfs(top, list);
-
-        System.out.println(list.size());
-        for (MaxTop max : list) {
-            System.out.println(max.toString());
         }
-
 
         return result;
     }
-
-    private void dfs(Top parent, List<MaxTop> list) {
-
-        // root 노드 부터 시작하기 때문에 자식 노드를 순회한다.
-        for (Top top : parent.child.values()) {
-
-            if(cnt <= top.count) {
-                cnt = top.count;
-                Top cur = top;
-                list.add(new MaxTop(top.name, top.next, top.count, top.depth));
-            }
-
-            // 모든 노드 탐색을 위해 재귀를 사용하여 반복 (현재 노드의 모든 자식을 탐색하기 위함)
-            dfs(top, list);
-        }
-    }
-
     // 노드 생성
     public void countWires(Top top, int[] idx, int depth) {
 
-        if(idx != null || idx[0] != 0) {
+        if(idx != null) {
             int cur = idx[0];
             int next = idx[1];
 
-            Top curTop;
+            Top curTop = null;
 
-            if(top.child.containsKey(cur)) {
-                curTop = top.child.get(cur);
-
-            } else {
-                curTop = new Top(top, cur, next, depth);     // 새로 생성한 노드
-                top.child.put(cur, curTop);         // 생성한 노드를 부모 노드의 자식으로 저장
+            // 자식이 있는지 찾기
+            for (int i = 0; i < top.child.size(); i++) {
+                if(top.child.get(i) == top) {
+                    curTop = top.child.get(i);
+                }
             }
 
-            ++curTop.count;
+            // 자식이 없으면 add
+            if(curTop == null) {
+                curTop = new Top(top, cur, depth);     // 새로 생성한 노드
+                ++curTop.count;
+                top.child.add(curTop);         // 생성한 노드를 부모 노드의 자식으로 저장
+            }
 
             ++cnt;
+
             if(cnt < wire.length) {
                 countWires(curTop, wire[cnt], depth+1);
             }
         }
     }
-
-    // 노드 탐색
-
-    // 최적의 노드로 재구성 (전선을 최대한 나누어줌)
 }
 
 class MaxTop {
@@ -113,25 +88,21 @@ class MaxTop {
 }
 
 class Top {
-    public int name;
-    public int next;
+    public int top;
     public int count;
-
     public Top parent;
-    public Map<Integer, Top> child;
-
     public int depth;
+    public List<Top> child;
 
-    Top(Top parent, int name, int next, int depth) {
+    Top(Top parent, int top, int depth) {
         this.parent = parent;
-        this.name = name;
-        this.next = next;
-        this.child = new HashMap<>();
+        this.top = top;
+        this.child = new ArrayList<>();
         this.count = 0;
         this.depth = depth;
     }
 
     public String toString() {
-        return "name = " + name + ", next = " + next + ", count = " + count;
+        return "top = " + top + ", count = " + count + ", depth = " + depth;
     }
 }

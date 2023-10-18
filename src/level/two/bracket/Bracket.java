@@ -31,23 +31,24 @@ class BracketInfo {
     // 문자열 w를 u, v로 분리
     public void sortBracket(String param) {
 
-        int left = 0;
-        int right = 0;
         if(param.length() > 0 && this.r.length() < this.w.length()) {
             String tmp = "";
             String[] str = param.split("");
 
+            int left = 0;
+            int right = 0;
+
             for (int i = 0; i < str.length; i++) {
                 tmp += str[i];
                 if(str[i].charAt(0) == '(') {
-                    ++left;
-                } else {
-                    ++right;
+                    left++;
+                }
+                if(str[i].charAt(0) == ')') {
+                    right++;
                 }
 
                 if(i != 0) {
                     if(left == right && left == 1) {
-                        // 일반 케이스
                         this.u = tmp;
                         if(this.u.charAt(0) == ')') {
                             this.u = this.balance(this.u);
