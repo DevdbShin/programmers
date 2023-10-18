@@ -5,38 +5,52 @@ import java.util.Map;
 
 public class DfsBfs {
 
-    public static void main(String[] args) {
+    private int idx = 0;
 
+    public static void main(String[] args) {
+        DfsBfs db = new DfsBfs();
+        db.solution(new int[][] {{4,5,1},{1,2},{1,3},{1,4},{2,4},{3,4}});
     }
 
     public void solution (int[][] input) {
 
-        int idx = 0;
-
         GraphNode root = new GraphNode();
-
         root.setDot(input[0][2]);
         root.setParent(null);
+        idx = input.length;
+        createNode(root, input);
 
-        for (int [] item : input) {
-            if(idx > 0) {
-                createNode(root, item[0],item[1]);
+        Map<Integer, GraphNode> map = root.getChildValues();
+        System.out.println(map.size());
+        for (GraphNode node : map.values()) {
+            if(node != null) {
+                System.out.println(node.getDot());
             }
-            ++idx;
         }
     }
 
-    public void createNode (GraphNode root, int cur, int next) {
+    public void createNode (GraphNode parent, int[][] arr) {
 
-        GraphNode curNode = null;
+        if (idx != 0) {
+            for (int i = 0; i < idx; ) {
+                if (idx != 0 && arr[i] != null) {
+                    int cur = arr[i][0];
+                    int next = arr[i][1];
 
-        if(root.getChild(cur) != null) {
-            curNode = root.getChild(cur);
-            curNode.setChild(cur, );
-        } else {
-            curNode = new GraphNode();
-            curNode.setParent(root);
-            curNode.setDot(cur);
+                    GraphNode curNode = null;
+                    if (parent.getChild(cur) != null) {
+                        curNode = new GraphNode();
+                        curNode.setParent(parent);
+                        curNode.setDot(cur);
+                    } else {
+                        parent.setChild(next, curNode);
+                        curNode = parent;
+                    }
+                    arr[i] = null;
+                    createNode(curNode, arr);
+                }
+                --idx;
+            }
         }
     }
 }
@@ -45,7 +59,7 @@ class GraphNode {
     private int dot;
     private GraphNode parent;
 
-    private Map<Integer, GraphNode> child;
+    private Map<Integer, GraphNode> child = new HashMap<>();
 
     public int getDot() {
         return dot;
@@ -68,5 +82,9 @@ class GraphNode {
     }
     public void setChild(int dot, GraphNode node) {
         this.child.put(dot, node);
+    }
+
+    public Map<Integer, GraphNode> getChildValues() {
+        return this.child;
     }
 }
