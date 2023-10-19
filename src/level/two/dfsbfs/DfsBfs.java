@@ -1,11 +1,7 @@
-package level.two;
-
-import level.two.menu.MenuFixed;
+package level.two.dfsbfs;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class DfsBfs {
 
