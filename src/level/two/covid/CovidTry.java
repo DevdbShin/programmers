@@ -86,11 +86,11 @@ class Place {
     private int col;        // 열
     private int distance;   // 거리
 
-    private final int left; // 왼쪼
-    private final int right;
-    private final int top;
-    private final int bottom;
-    private final List<Place> moveList;
+    private final int left;  // 왼쪽
+    private final int right; // 오른쪽
+    private final int top;  // 위
+    private final int bottom; // 아래
+    private final List<Place> moveList; // 4방향 모음
 
     public Place(int row, int col, int distance) {
         this.row = row;
