@@ -1,8 +1,6 @@
-package level.etc.mission;
+package level.etc.mission.menuhtml;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class MenuHtml {
     public static void main(String[] args) {
