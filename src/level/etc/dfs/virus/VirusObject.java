@@ -32,16 +32,17 @@ public class VirusObject {
     }
 
     public int solution(int n, int m, List<Node> nodeList) {
-        return dfs(nodeList.get(0), nodeList);
+        boolean[] visited = new boolean[n + 1];
+        return dfs(1, nodeList.get(0), nodeList, visited) - 1;
     }
 
-    public int dfs(Node node, List<Node> nodeList) {
-        node.setVisited(true);
+    public int dfs(int idx, Node node, List<Node> nodeList, boolean[] visited) {
+        visited[idx] = true;
         int count = 0;
         ++count;
-        for (int i = 0; i < nodeList.size(); i++) {
-            if(!nodeList.get(i).isVisited()) {
-                count += dfs(nodeList.get(i), nodeList);
+        for (int i = 1; i < nodeList.size(); i++) {
+            if(!nodeList.get(i).isVisited() && !visited[i]) {
+                count += dfs(i, nodeList.get(i), nodeList, visited);
             }
         }
         return count;
