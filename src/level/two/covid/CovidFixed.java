@@ -27,7 +27,6 @@ public class CovidFixed {
             // count가 0보다 크면 false이고 0보다 작거나 같으면 true임
             answer[r] = 0 < count ? 0 : 1;
         }
-
         return answer;
     }
 
