@@ -6,14 +6,10 @@ public class ReArrow {
     public static void main(String[] args) {
         ReArrow re = new ReArrow();
         System.out.println(Arrays.toString(re.solution(5, new int[]{2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0})));
-        //System.out.println(Arrays.toString(re.solution(1, new int[]{1,0,0,0,0,0,0,0,0,0,0})));
+        //System.out.println(Arrays.toString(re.solution(3, new int[]{0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0})));
         //System.out.println(Arrays.toString(re.solution(0, new int[]{0,0,0,0,0,0,0,0,0,0,0})));
         //System.out.println(Arrays.toString(re.solution(9, new int[]{0,0,1,2,0,1,1,1,1,1,1})));
-        //System.out.println(Arrays.toString(re.solution(3, new int[] {0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0})));
     }
-
-    public static int loop = 0;
-
     public int[] solution(int n, int[] info) {
         Score score = new Score(n, info);
         for (int i = 0; i < info.length; i++) {
@@ -28,11 +24,10 @@ public class ReArrow {
     public void findMaxScore (int idx, int next, int n, Score score) {
         // 재귀마다 새로운 라이언의 점수 배열 생성
         score.setRyan(new int[score.getApeachLength()]);
-
         // 화살 갯수
         int arrow = 0;
-
-        for (int i = idx; i < score.getApeachLength(); i++) {
+        int leng = score.getApeachLength();
+        for (int i = idx; i < leng; i++) {
             // 화살 다 떨어지면 돌 필요 없음
             if(n <= arrow) {
                 break;
@@ -52,23 +47,27 @@ public class ReArrow {
             score.setRyanIdx(i, 1);
             ++arrow;
         }
-        if(0 < (n - arrow)) {
-            score.setRyanIdx(score.getApeachLength() - 1, n - arrow);
+        if(arrow < n) {
+            score.setRyanIdx(leng - 1, n - arrow);
         }
-
         int diff = score.getRyanScore() - score.getApeachScore();
         if(score.getDiffScore() < diff) {
             score.setBest(score.getRyan());
             score.setDiffScore(diff);
             score.setBestScore(score.getRyanScore());
-        } else if(score.getDiffScore() == diff && score.getDiffScore() != 0) {
-            if(score.getBestScore() < score.getRyanScore()) {
-                score.setBest(score.getRyan());
+        } else if(score.getDiffScore() == diff && 0 < score.getDiffScore()) {
+            for (int i = score.getRyan().length - 1; i >= 0; i--) {
+                if(score.getBest()[i] < score.getRyanIdx(i)) {
+                    score.setBest(score.getRyan());
+                    score.setBestScore(score.getRyanScore());
+                    break;
+                } else if(score.getRyanIdx(i) < score.getBest()[i]) {
+                    break;
+                }
             }
-
         }
-        //System.out.println(Arrays.toString(score.getRyan()) + " / " + score.getRyanScore() + " / " + score.getApeachScore() + " / " + diff + " / " + score.getDiffScore());
-        if(next < score.getApeachLength()) {
+        System.out.println(Arrays.toString(score.getRyan()) + " / " + score.getRyanScore() + " / " + score.getApeachScore() + " / " + diff + " / " + next);
+        if(next < leng) {
             findMaxScore(idx, ++next, n, score);
         }
     }
@@ -90,6 +89,7 @@ class Score {
         this.best = null;
         this.diffScore = 0;
         this.bestScore = 0;
+        this.ryan = new int[this.apeach.length];
     }
 
     public int getApeachIdx(int idx) {
@@ -110,6 +110,10 @@ class Score {
 
     public void setRyanIdx(int idx, int arrow) {
         this.ryan[idx] = arrow;
+    }
+
+    public int getRyanIdx(int idx) {
+        return this.ryan[idx];
     }
 
     public int[] getBest() {
@@ -146,11 +150,7 @@ class Score {
 
     public int getApeachScore() {
         int score = 0;
-        int max = this.n;
         for (int i = 0; i < this.apeach.length; i++) {
-            if(max == 0) {
-                break;
-            }
             if(0 < this.apeach[i]) {
                 if(this.ryan[i] <= this.apeach[i]) {
                     score += this.scores[i];
@@ -162,11 +162,7 @@ class Score {
 
     public int getRyanScore() {
         int score = 0;
-        int max = this.n;
         for (int i = 0; i < this.ryan.length; i++) {
-            if(max == 0) {
-                break;
-            }
             if(this.apeach[i] < this.ryan[i]) {
                 score += this.scores[i];
             }
