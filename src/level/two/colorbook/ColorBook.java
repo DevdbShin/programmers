@@ -2,6 +2,7 @@ package level.two.colorbook;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class ColorBook {
     public static void main(String[] args) {
@@ -21,26 +22,15 @@ public class ColorBook {
                 ,{0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0}
                 ,{0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0}})));
     }
-    public static int numberOfArea;
-    public static int maxSizeOfOneArea;
-    public static int color;
-    public static ArrayList<Integer> list;
-    public static int loop = 1;
     public int[] solution(int m, int n, int[][] picture) {
-        numberOfArea = 0;
-        maxSizeOfOneArea = Integer.MIN_VALUE;
-        color = 0;
-        list = new ArrayList<>();
-        int[][] copyArr = new int[m][n];
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                copyArr[i][j] = picture[i][j];
-            }
-        }
-        for (int i = 0; i < copyArr.length; i++) {
-            for (int j = 0; j < copyArr[i].length; j++) {
-                if(0 < copyArr[i][j]) {
-                    findSibling(i,j,copyArr,m,n);
+        int numberOfArea = 0;
+        int maxSizeOfOneArea = Integer.MIN_VALUE;
+        ArrayList<Integer> list = new ArrayList<>();
+        for (int i = 0; i < picture.length; i++) {
+            for (int j = 0; j < picture[i].length; j++) {
+                if(0 < picture[i][j]) {
+                    ++numberOfArea;
+                    findSibling(picture[i][j], i, j, m, n, list, picture);
                 }
             }
         }
@@ -59,34 +49,32 @@ public class ColorBook {
     }
 
     // 형제 찾는 메서드
-    public void findSibling(int row, int col, int[][] picture, int m, int n) {
-        ++numberOfArea;
-        color = picture[row][col];
+    public void findSibling(int target, int row, int col, int m, int n, List<Integer> list, int[][] picture) {
         picture[row][col] = 0;
-        recursiveOneDirection(row + 1, col, color, picture, row, col, m, n);    // 상
-        recursiveOneDirection(row - 1, col, color, picture, row, col, m, n);    // 하
-        recursiveOneDirection(row, col - 1, color, picture, row, col, m, n);    // 좌
-        recursiveOneDirection(row, col + 1, color, picture, row, col, m, n);    // 우
-        list.add(loop);
-        loop = 1;
+        int count = 1;
+        count += recursiveOneDirection(row + 1, col, target, picture, row, col, m, n);    // 상
+        count += recursiveOneDirection(row - 1, col, target, picture, row, col, m, n);    // 하
+        count += recursiveOneDirection(row, col - 1, target, picture, row, col, m, n);    // 좌
+        count += recursiveOneDirection(row, col + 1, target, picture, row, col, m, n);    // 우
+        list.add(count);
     }
 
     // 전달 받은 방향으로 재귀하며 탐색
-    public boolean recursiveOneDirection(int row, int col, int target, int[][] picture, int orgRow, int orgCol, int m, int n) {
+    public int recursiveOneDirection(int row, int col, int target, int[][] picture, int orgRow, int orgCol, int m, int n) {
         if(row == orgRow && col == orgCol) {
-            return false;
+            return 0;
         }
         if(row < 0 || col < 0 || m <= row || n <= col || picture[row][col] != target) {
-            return false;
+            return 0;
         }
+        int count = 1;
         if(picture[row][col] == target) {
             picture[row][col] = 0;
-            ++loop;
-            recursiveOneDirection(row + 1, col, target, picture, orgRow, orgCol, m, n);
-            recursiveOneDirection(row - 1, col, target, picture, orgRow, orgCol, m, n);
-            recursiveOneDirection(row, col - 1, target, picture, orgRow, orgCol, m, n);
-            recursiveOneDirection(row, col + 1, target, picture, orgRow, orgCol, m, n);
+            count += recursiveOneDirection(row + 1, col, target, picture, orgRow, orgCol, m, n);
+            count += recursiveOneDirection(row - 1, col, target, picture, orgRow, orgCol, m, n);
+            count += recursiveOneDirection(row, col - 1, target, picture, orgRow, orgCol, m, n);
+            count += recursiveOneDirection(row, col + 1, target, picture, orgRow, orgCol, m, n);
         }
-        return true;
+        return count;
     }
 }
