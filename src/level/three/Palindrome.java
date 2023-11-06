@@ -19,8 +19,6 @@ public class Palindrome {
                                     break;
                                 }
                             }
-
-
                             if(bool) {
                                 answer = i;
                                 break palindrome;
