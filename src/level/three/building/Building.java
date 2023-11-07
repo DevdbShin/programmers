@@ -1,4 +1,4 @@
-package level.three;
+package level.three.building;
 
 import java.util.Arrays;
 
@@ -6,16 +6,11 @@ public class Building {
     public static void main(String[] args) {
         Building b = new Building();
         System.out.println(b.solution(new int[][] {{5,5,5,5,5},{5,5,5,5,5},{5,5,5,5,5},{5,5,5,5,5}}, new int[][] {{1,0,0,3,4,4},{1,2,0,2,3,2},{2,1,0,3,1,2},{1,0,1,3,3,1}}));
-        System.out.println(loop);
     }
-
-    public static int loop = 0;
 
     public int solution(int[][] board, int[][] skill) {
         int answer = 0;
-        Arrays.sort(skill, (c, n) -> {
-            return c[0] - n[0];
-        });
+
         for (int[] item : skill) {
             setDegree(item[0], item[1], item[2], item[3], item[4], item[5], board);
         }
