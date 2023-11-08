@@ -1,12 +1,6 @@
 package level.three.sheepwolf;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class SheepWolf {
-
-    private int idx = 0;
 
     public static void main(String[] args) {
         SheepWolf sw = new SheepWolf();
@@ -14,60 +8,72 @@ public class SheepWolf {
     }
 
     public int solution(int[] info, int[][] edges) {
-        Node root = new Node(0, 0);
-        Node node = null;
-        for (int i = 0; i <edges.length ; i++) {
-
-            Node node = createNode(root, edges, info, i + 1);
-        }
-
-        for (Node node : root.child) {
-            for (Node child : node.child) {
-                System.out.println(node.number + " / " + child.number);
-            }
-            System.out.println();
-        }
+        Tree tree = new Tree();
+        tree.createTree(info, edges);
+        tree.printTreePreorder(tree.getRoot());
         int answer = 0;
         return answer;
-    }
-
-    public Node createNode (Node parent, int[][] arr, int[] info, int num) {
-
-        if(num < arr.length) {
-            int cur = arr[num][0];
-            int next = arr[num][1];
-            Node curNode = null;
-            if(!parent.child.isEmpty()) {
-                for (Node node : parent.child) {
-                    if (node.number == cur) {
-                        curNode = node;
-                    }
-                }
-            }
-
-            if(curNode == null) {
-                curNode = new Node(next, info[num]);
-                curNode.parent = parent;
-                parent.add(curNode);
-                curNode = parent;
-            }
-            createNode(curNode, arr, info, ++num);
-        }
     }
 }
 
 class Node {
     int number;
     int kind;
-    Node parent;
-    List<Node> child = new ArrayList<>();
+    Node left;
+    Node right;
 
     Node(int number, int kind) {
         this.number = number;
         this.kind = kind;
+        this.left = null;
+        this.right = null;
+    }
+}
+
+class Tree {
+    Node root;
+
+    public Node getRoot() {
+        return root;
     }
 
-    public void add(Node node) {
-        this.child.add(node);
+    public void createTree(int[] info, int[][] edges) {
+        Node[] nodes = new Node[edges.length];
+
+        int idx = 0;
+        for (int[] edge : edges) {
+            int parent = edge[0];
+            int child = edge[1];
+
+            if (nodes[parent] == null) {
+                nodes[parent] = new Node(parent, info[idx]);
+            }
+
+            if (nodes[child] == null) {
+                nodes[child] = new Node(child, info[idx]);
+            }
+
+            Node parentNode = nodes[parent];
+            Node childNode = nodes[child];
+
+            if (parentNode.left == null) {
+                parentNode.left = childNode;
+            } else {
+                parentNode.right = childNode;
+            }
+            ++idx;
+        }
+
+        this.root = nodes[0];
+    }
+
+    public void printTreePreorder(Node node) {
+        if (node == null) {
+            return;
+        }
+
+        System.out.println(node.number + " / " + node.kind);
+        printTreePreorder(node.left);
+        printTreePreorder(node.right);
     }
 }
